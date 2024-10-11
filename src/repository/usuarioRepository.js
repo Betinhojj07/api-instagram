@@ -10,8 +10,11 @@ export async function criarUsuarioRepository(usuario){
 }
 
 export async function validarUsuarioRepository(usuario){
-    const comando = `SELECT * FROM usuario
-                            WHERE nm_usuario = ? and ds_senha = ?`;
+    const comando = `SELECT 
+                        id_usuario  id,
+                        nm_usuario  nome
+                    FROM usuario
+                    WHERE nm_usuario = ? and ds_senha = ?`;
 
     const resposta = await db.query(comando, [usuario.nome, usuario.senha])
     return resposta[0][0]

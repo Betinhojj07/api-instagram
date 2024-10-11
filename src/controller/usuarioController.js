@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { criarUsuarioRepository } from '../repository/usuarioRepository.js'
+import { criarUsuarioRepository, validarUsuarioRepository } from '../repository/usuarioRepository.js'
 
 const endpoints = Router();
 
@@ -22,11 +22,15 @@ endpoints.post('/usuario', async (req, resp) => {
 endpoints.post('/login', async (req, resp) => {
     try {
         const usuario = req.body;
-        const id = await criarUsuarioRepository(usuario);
+        const resposta = await validarUsuarioRepository(usuario);
 
-        return resp.send({
-            novoId: id
-        })
+        if (!resposta) {
+            return resp.status(400).send({
+                erro: "Usuário ou senha incorretos."
+            })
+        }
+
+        return resp.send(resposta)
     } catch (error) {
         return resp.status(400).send({
             erro: error.message
